@@ -1,0 +1,5 @@
+10 am, 10 pm
+
+top clip in the past 12 hours
+
+function (game,hours)
