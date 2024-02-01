@@ -129,21 +129,3 @@ twitchID_to_game = {
     "491931": "eft",
     "509658": "irl",
 }
-
-# path = f"files/clips/{datetime.datetime.today().date()}/"
-
-# clips = get_top_game_clips(game_to_twitchID["gta"])
-# english_clips = filter_english_clips(clips)
-# no_clips = 1
-
-# for i in range(len(english_clips[:no_clips])):
-#     clip_object = english_clips[i]
-
-#     print(f'Downloading clip {i+1}/{len(english_clips[:no_clips])}...')
-    
-#     download_clip(clip_object, path)
-
-#     print(f'Adding data of clip {i+1}/{len(english_clips[:no_clips])}...')
-
-#     add_data_clip(clip_object, path)
-
