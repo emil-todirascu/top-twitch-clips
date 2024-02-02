@@ -22,7 +22,14 @@ def upload_new_video(game, pastHours):
 
     clip_path = download(gameID, time)
 
-    upload(clip_path)
+    print("Are you sure you want to upload this video? (y/n)")
+
+    if input() == "y":
+        upload(clip_path)
+    else:
+        print("Exiting...")
+
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
