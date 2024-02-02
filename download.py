@@ -4,7 +4,7 @@ import os
 import requests
 import datetime
 
-GENERAL_DESCRIPTION = "\n\nFor all inquiries, please email: hello.toptwitchclips@gmail.com"
+GENERAL_DESCRIPTION = "\n\n\nFor all inquiries, please email: hello.toptwitchclips@gmail.com"
 
 class TwitchAPI():
 
@@ -91,11 +91,14 @@ def download_clip(clip_object, path):
 def add_data_clip(clip_object, path):
     data_path = f'{path}{clip_object["title"].replace("/","_")}.json'.replace("\\", "").replace("\'", "").replace("\"", "").lower()
 
-    description = f'Credit: https://www.twitch.tv/{clip_object["broadcaster_name"]} {GENERAL_DESCRIPTION}'
+    hashtags = f'#{twitchID_to_game[clip_object["game_id"]]} #{clip_object["broadcaster_name"]} #twitch #gaming'
+    description = f'Credit: https://www.twitch.tv/{clip_object["broadcaster_name"]} {GENERAL_DESCRIPTION} \n\n\n {hashtags}'
+
     keywords = f'{twitchID_to_game[clip_object["game_id"]]}, {clip_object["broadcaster_name"]}, twitch, gaming, {clip_object["title"]}'
 
+
     data = {
-        "title": clip_object["title"],
+        "title": clip_object["title"] + " | " + clip_object["broadcaster_name"] + " | Top Twitch Clips",
         "description": description,
         "category": "20", # Gaming
         "keywords": keywords,
