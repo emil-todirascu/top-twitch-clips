@@ -1,2 +1,4 @@
 files/
 __pycache__/
+notes.txt
+*.json
