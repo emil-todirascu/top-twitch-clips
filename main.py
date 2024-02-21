@@ -1,7 +1,7 @@
 import datetime
-from download import download
+from download import download_single, download_multiple
 from upload import upload
-import sys
+from edit import edit_clips
 
 game_to_twitchID = {
     "gta": "32982",
@@ -15,30 +15,40 @@ game_to_twitchID = {
     "irl": "509658",
 }
 
-def upload_new_video(game, pastHours):
+def upload_video(game, pastHours, count=1):
 
     gameID = game_to_twitchID[game]
     time = (datetime.datetime.today() - datetime.timedelta(hours=pastHours)).isoformat() + "Z"
 
-    clip_path = download(gameID, time)
+    clip_path = None
+    if count > 1:
+        clip_paths = download_multiple(gameID, time, count)
+        clip_path = edit_clips(clip_paths)
+    else:
+        clip_path = download_single(gameID, time)
 
     print("Are you sure you want to upload this video? (y/n)")
 
     if input() == "y":
-        upload(clip_path)
+        # upload(clip_path)
+        print("up")
     else:
         print("Exiting...")
 
+# if __name__ == "__main__":
+#     if len(sys.argv) not in [3]:
+#         print("Usage: python main.py <game> <pastHours>")
+#         sys.exit(1)
 
+#     game = sys.argv[1]
+#     pastHours = int(sys.argv[2])
 
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python main.py <game> <pastHours>")
-        sys.exit(1)
-
-    game = sys.argv[1]
-    pastHours = int(sys.argv[2])
-
-    upload_new_video(game, pastHours)
+#     upload_new_video(game, pastHours)
 
 # gta 12
+
+game = input("Enter game: ")
+hours = int(input("Enter hours: "))
+count = int(input("Enter count: "))
+
+upload_video(game, hours, count)

@@ -77,7 +77,7 @@ def download_clip(clip_object, path):
     clip_url = clip_object["thumbnail_url"][:index] + '.mp4'
     r = requests.get(clip_url)
 
-    clip_path = f'{path}{clip_object["title"].replace("/","_")}.mp4'.replace("\\", "").replace("\'", "").replace("\"", "").lower()
+    clip_path = f'{path}{clip_object["title"].replace("/","_")}.mp4'.replace("\\", "").replace("\'", "").replace("\"", "").replace("|", "").replace("?","").lower()
 
     if r.headers['Content-Type'] == 'binary/octet-stream':
         if not os.path.exists(path): os.makedirs(path)
@@ -89,7 +89,7 @@ def download_clip(clip_object, path):
     return clip_path
 
 def add_data_clip(clip_object, path):
-    data_path = f'{path}{clip_object["title"].replace("/","_")}.json'.replace("\\", "").replace("\'", "").replace("\"", "").lower()
+    data_path = f'{path}{clip_object["title"].replace("/","_")}.json'.replace("\\", "").replace("\'", "").replace("\"", "").replace("|", "").replace("?","").lower()
 
     hashtags = f'#{twitchID_to_game[clip_object["game_id"]]} #{clip_object["broadcaster_name"]} #twitch #gaming'
     description = f'Credit: https://www.twitch.tv/{clip_object["broadcaster_name"]} {GENERAL_DESCRIPTION} \n\n\n {hashtags}'
@@ -102,14 +102,16 @@ def add_data_clip(clip_object, path):
         "description": description,
         "category": "20", # Gaming
         "keywords": keywords,
-        "privacy_status": "public"
+        "privacy_status": "public",
+        "streamer": clip_object["broadcaster_name"],
+        "game": twitchID_to_game[clip_object["game_id"]],
     }
 
     if not os.path.exists('files/clips'): os.makedirs('files/clips')
     with open(data_path, 'w', encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     
-def download(game_id, pastHours):
+def download_single(game_id, pastHours):
     api.auth()
 
     clipObject = filter_english_clips(get_top_game_clips(game_id, pastHours))[0]
@@ -120,6 +122,23 @@ def download(game_id, pastHours):
     add_data_clip(clipObject, path)
 
     return clip_path
+
+def download_multiple(game_id, pastHours, amount):
+    api.auth()
+
+    clips = filter_english_clips(get_top_game_clips(game_id, pastHours))[:amount]
+    
+    path = f"files/clips/{datetime.datetime.today().date()}/"
+    
+    clip_paths = []
+    print("Downloading clips...")
+    for clip in clips:
+        clip_path = download_clip(clip, path)
+        add_data_clip(clip, path)
+        clip_paths.append(clip_path)
+    print("Downloaded clips.\n")
+
+    return clip_paths
 
 twitchID_to_game = {
     "32982": "gta",
