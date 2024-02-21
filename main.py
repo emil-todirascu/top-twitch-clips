@@ -27,10 +27,10 @@ def upload_video(game, pastHours, count=1):
     else:
         clip_path = download_single(gameID, time)
 
-    print("Are you sure you want to upload this video? (y/n)")
+    print(f"Are you sure you want to upload {clip_path}? (y/n)")
 
     if input() == "y":
-        # upload(clip_path)
+        upload(clip_path)
         print("up")
     else:
         print("Exiting...")

@@ -166,6 +166,11 @@ def upload_video(file_path, title="Test Title", description="Test Description", 
     parser.add_argument("--category", default=category, help="Numeric video category. See https://developers.google.com/youtube/v3/docs/videoCategories/list")
     parser.add_argument("--keywords", help="Video keywords, comma separated", default=keywords)
     parser.add_argument("--privacyStatus", choices=VALID_PRIVACY_STATUSES, default=privacy_status, help="Video privacy status.")
+    # NOT IN THE ORIGINAL FILE
+    parser.add_argument("--logging_level", default="INFO", help="Set the logging level")
+    parser.add_argument("--noauth_local_webserver", action="store_true", help="Do not run a local web server to handle redirects during OAuth")
+    parser.add_argument("--auth_host_port", default=[8080, 8090], help="Host and port to use when running a local web server to handle redirects during OAuth")
+    parser.add_argument("--auth_host_name", default="localhost", help="Host to use when running a local web server to handle redirects during OAuth")
     args = parser.parse_args(["--file", file_path])
 
     if not os.path.exists(args.file):
