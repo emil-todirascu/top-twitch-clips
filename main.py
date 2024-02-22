@@ -1,5 +1,5 @@
 import datetime
-from download import download_single, download_multiple
+from download import download_multiple
 from upload import upload
 from edit import edit_clips
 
@@ -20,11 +20,7 @@ def upload_video(game, pastHours, count=1):
     gameID = game_to_twitchID[game]
     time = (datetime.datetime.today() - datetime.timedelta(hours=pastHours)).isoformat() + "Z"
 
-    clip_path = None
-    if count > 1:
-        clip_path = edit_clips(download_multiple(gameID, time, count))
-    else:
-        clip_path = download_single(gameID, time)
+    clip_path = edit_clips(download_multiple(gameID, time, count))
 
     print(f"Are you sure you want to upload {clip_path}? (y/n)")
 
@@ -38,14 +34,17 @@ def main():
     if game not in game_to_twitchID:
         print("Invalid game")
         return
+    
     hours = int(input("Enter hours: "))
     if hours < 0:
         print("Invalid hours")
         return
+    
     count = int(input("Enter count: "))
-    if count < 1:
+    if count < 2:
         print("Invalid count")
         return
+    
     upload_video(game, hours, count)
 
 main()

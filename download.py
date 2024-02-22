@@ -110,18 +110,6 @@ def add_data_clip(clip_object, path):
     if not os.path.exists('files/clips'): os.makedirs('files/clips')
     with open(data_path, 'w', encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
-    
-def download_single(game_id, pastHours):
-    api.auth()
-
-    clipObject = filter_english_clips(get_top_game_clips(game_id, pastHours))[0]
-    
-    path = f"files/clips/{datetime.datetime.today().date()}/"
-    
-    clip_path = download_clip(clipObject, path)
-    add_data_clip(clipObject, path)
-
-    return clip_path
 
 def download_multiple(game_id, pastHours, amount):
     api.auth()
