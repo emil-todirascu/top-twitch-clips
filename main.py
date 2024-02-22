@@ -22,8 +22,7 @@ def upload_video(game, pastHours, count=1):
 
     clip_path = None
     if count > 1:
-        clip_paths = download_multiple(gameID, time, count)
-        clip_path = edit_clips(clip_paths)
+        clip_path = edit_clips(download_multiple(gameID, time, count))
     else:
         clip_path = download_single(gameID, time)
 
@@ -31,12 +30,22 @@ def upload_video(game, pastHours, count=1):
 
     if input() == "y":
         upload(clip_path)
-        print("up")
     else:
         print("Exiting...")
 
-game = input("Enter game: ")
-hours = int(input("Enter hours: "))
-count = int(input("Enter count: "))
+def main():
+    game = input("Enter game: ")
+    if game not in game_to_twitchID:
+        print("Invalid game")
+        return
+    hours = int(input("Enter hours: "))
+    if hours < 0:
+        print("Invalid hours")
+        return
+    count = int(input("Enter count: "))
+    if count < 1:
+        print("Invalid count")
+        return
+    upload_video(game, hours, count)
 
-upload_video(game, hours, count)
+main()
