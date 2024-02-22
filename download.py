@@ -98,7 +98,7 @@ def add_data_clip(clip_object, path):
 
 
     data = {
-        "title": clip_object["title"] + " | " + clip_object["broadcaster_name"] + " | Top Twitch Clips",
+        "title": clip_object["title"],
         "description": description,
         "category": "20", # Gaming
         "keywords": keywords,

@@ -21,7 +21,8 @@ def edit_clips(clip_paths):
     trans = VideoFileClip("files/transitions/white noise.mp4").subclip(0, 0.5)
     trans = trans.volumex(0.1)
 
-    final_clip_path = add_data(clip_paths)
+    clip_times = get_clip_times(clips, trans.duration)
+    final_clip_path = add_data(clip_paths, clip_times)
     
     final_clip = concatenate_videoclips(clips, transition=trans)
     final_clip.write_videofile(final_clip_path, preset="ultrafast")
@@ -34,6 +35,16 @@ def edit_clips(clip_paths):
 
     print("Edited clips.")
     return final_clip_path
+
+def get_clip_times(clips, transition_time):
+    times = [0]
+    output = ["00:00"]
+    for i in range(len(clips)):
+        time = clips[i].duration + transition_time + times[i]
+        times.append(int(time))
+        output.append(f"{int(time//60):02d}:{int(time%60):02d}")
+    
+    return output[:-1]
 
     
 def make_overlay(clip_path):
@@ -61,30 +72,31 @@ def add_overlay(clip, overlay):
     edited_video = CompositeVideoClip([clip, img_clip])
     return edited_video
 
-def add_data(clip_paths):
+def add_data(clip_paths, clip_times):
     with open(clip_paths[0].replace(".mp4", ".json"), 'r', encoding="utf-8") as f:
         file_data = json.load(f)
     game = file_data["game"]
     streamers_list = []
     keywords_list = []
     twitch_credits = "Credits:\n"
-    for clip_path in clip_paths:
+    chapters = "Chapters:\n"
+    for i, clip_path in enumerate(clip_paths):
         with open(clip_path.replace(".mp4", ".json"), 'r', encoding="utf-8") as f:
             file_data = json.load(f)
         streamers_list.append(file_data["streamer"])
         keywords_list.extend(file_data["keywords"].split(", "))
         twitch_credits += f"https://www.twitch.tv/{file_data['streamer']}\n"
+        chapters += f"{clip_times[i]} {file_data["title"]}\n"
 
     streamers = ", ".join(set(streamers_list))
     keywords = ", ".join(set(keywords_list))
-    description = f"Top {game.upper()} Clips {datetime.datetime.today().date()}\n\n\n{twitch_credits}\n\n\n{keywords}"
+
+    description = f"{chapters}\n\n\n{twitch_credits}\n\n\n{keywords}"
     streamer_names = ", ".join(sorted(list(set(streamers_list)),key=lambda x: len(x))[:min(3, len(streamers_list))])
     title = f"🚨Top {game.upper()} Clips🚨{streamer_names} and more...🚨{datetime.datetime.today().date()}🚨"
-    print(title)
-
         
     data_path = f"files/clips/{datetime.datetime.today().date()}/result/Top {game.upper()} Clips.json"
-
+    print(description)
     data = {
         "title": title,
         "description": description,
@@ -102,3 +114,5 @@ def add_data(clip_paths):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     return data_path[:-5] + ".mp4"
+
+edit_clips(["files/clips/2024-02-21/ hydra and ott complete a usb trade.mp4", "files/clips/2024-02-21/2 to the head.mp4", "files/clips/2024-02-21/jump scare and a death .mp4", "files/clips/2024-02-21/jps pickup gets denied.mp4", "files/clips/2024-02-21/cg vs company.mp4"])
