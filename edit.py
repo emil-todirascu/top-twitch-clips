@@ -78,12 +78,15 @@ def add_data(clip_paths):
     streamers = ", ".join(set(streamers_list))
     keywords = ", ".join(set(keywords_list))
     description = f"Top {game.upper()} Clips {datetime.datetime.today().date()}\n\n\n{twitch_credits}\n\n\n{keywords}"
+    streamer_names = ", ".join(sorted(list(set(streamers_list)),key=lambda x: len(x))[:min(3, len(streamers_list))])
+    title = f"🚨Top {game.upper()} Clips🚨{streamer_names} and more...🚨{datetime.datetime.today().date()}🚨"
+    print(title)
 
         
     data_path = f"files/clips/{datetime.datetime.today().date()}/result/Top {game.upper()} Clips.json"
 
     data = {
-        "title": f"Top {game.upper()} Clips {datetime.datetime.today().date()}",
+        "title": title,
         "description": description,
         "category": "20", # Gaming
         "keywords": keywords,
@@ -99,6 +102,3 @@ def add_data(clip_paths):
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     return data_path[:-5] + ".mp4"
-
-
-# edit_clips(["files/clips/2024-02-21/jps pickup gets denied.mp4", "files/clips/2024-02-21/psa.mp4"])
