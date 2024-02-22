@@ -72,13 +72,18 @@ def filter_english_clips(clips):
     
     return english_clips
 
+def filter_clip_path(clip_path):
+    return clip_path.replace("\\", "").replace("\'", "").replace("\"", "").replace("|", "").replace("?","").lower()
+
 def download_clip(clip_object, path):
+    print(f"Downloading clip: \"{clip_object['title']}\"...")
+
     index = clip_object["thumbnail_url"].find('-preview')
     clip_url = clip_object["thumbnail_url"][:index] + '.mp4'
+    clip_path = filter_clip_path(f'{path}{clip_object["title"].replace("/","_")}.mp4')
+
+    # Download clip
     r = requests.get(clip_url)
-
-    clip_path = f'{path}{clip_object["title"].replace("/","_")}.mp4'.replace("\\", "").replace("\'", "").replace("\"", "").replace("|", "").replace("?","").lower()
-
     if r.headers['Content-Type'] == 'binary/octet-stream':
         if not os.path.exists(path): os.makedirs(path)
         with open(clip_path, 'wb') as f:
@@ -86,16 +91,16 @@ def download_clip(clip_object, path):
     else:
         print(f'Failed to download clip from thumb: {clip_object["thumbnail_url"]}')
 
+    print(f"Downloaded clip: \"{clip_object['title']}\".\n")
+
     return clip_path
 
 def add_data_clip(clip_object, path):
-    data_path = f'{path}{clip_object["title"].replace("/","_")}.json'.replace("\\", "").replace("\'", "").replace("\"", "").replace("|", "").replace("?","").lower()
+    data_path = filter_clip_path(f'{path}{clip_object["title"].replace("/","_")}.json')
 
     hashtags = f'#{twitchID_to_game[clip_object["game_id"]]} #{clip_object["broadcaster_name"]} #twitch #gaming'
     description = f'Credit: https://www.twitch.tv/{clip_object["broadcaster_name"]} {GENERAL_DESCRIPTION} \n\n\n {hashtags}'
-
     keywords = f'{twitchID_to_game[clip_object["game_id"]]}, {clip_object["broadcaster_name"]}, twitch, gaming'
-
 
     data = {
         "title": clip_object["title"],
@@ -107,24 +112,21 @@ def add_data_clip(clip_object, path):
         "game": twitchID_to_game[clip_object["game_id"]],
     }
 
+    # Save clip data
     if not os.path.exists('files/clips'): os.makedirs('files/clips')
     with open(data_path, 'w', encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 def download_multiple(game_id, pastHours, amount):
     api.auth()
-
     clips = filter_english_clips(get_top_game_clips(game_id, pastHours))[:amount]
-    
     path = f"files/clips/{datetime.datetime.today().date()}/"
     
     clip_paths = []
-    print("Downloading clips...")
     for clip in clips:
         clip_path = download_clip(clip, path)
         add_data_clip(clip, path)
         clip_paths.append(clip_path)
-    print("Downloaded clips.\n")
 
     return clip_paths
 
