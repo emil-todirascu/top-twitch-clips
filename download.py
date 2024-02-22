@@ -94,7 +94,7 @@ def add_data_clip(clip_object, path):
     hashtags = f'#{twitchID_to_game[clip_object["game_id"]]} #{clip_object["broadcaster_name"]} #twitch #gaming'
     description = f'Credit: https://www.twitch.tv/{clip_object["broadcaster_name"]} {GENERAL_DESCRIPTION} \n\n\n {hashtags}'
 
-    keywords = f'{twitchID_to_game[clip_object["game_id"]]}, {clip_object["broadcaster_name"]}, twitch, gaming, {clip_object["title"]}'
+    keywords = f'{twitchID_to_game[clip_object["game_id"]]}, {clip_object["broadcaster_name"]}, twitch, gaming'
 
 
     data = {

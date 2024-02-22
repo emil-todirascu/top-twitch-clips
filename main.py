@@ -35,18 +35,6 @@ def upload_video(game, pastHours, count=1):
     else:
         print("Exiting...")
 
-# if __name__ == "__main__":
-#     if len(sys.argv) not in [3]:
-#         print("Usage: python main.py <game> <pastHours>")
-#         sys.exit(1)
-
-#     game = sys.argv[1]
-#     pastHours = int(sys.argv[2])
-
-#     upload_new_video(game, pastHours)
-
-# gta 12
-
 game = input("Enter game: ")
 hours = int(input("Enter hours: "))
 count = int(input("Enter count: "))

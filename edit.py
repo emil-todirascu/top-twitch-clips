@@ -85,18 +85,20 @@ def add_data(clip_paths, clip_times):
             file_data = json.load(f)
         streamers_list.append(file_data["streamer"])
         keywords_list.extend(file_data["keywords"].split(", "))
-        twitch_credits += f"https://www.twitch.tv/{file_data['streamer']}\n"
+
+        if file_data["streamer"] not in twitch_credits:
+            twitch_credits += f"https://www.twitch.tv/{file_data['streamer']}\n"
         chapters += f"{clip_times[i]} {file_data["title"]}\n"
 
     streamers = ", ".join(set(streamers_list))
-    keywords = ", ".join(set(keywords_list))
+    keywords = "#" + ", #".join(set(keywords_list))
 
     description = f"{chapters}\n\n\n{twitch_credits}\n\n\n{keywords}"
     streamer_names = ", ".join(sorted(list(set(streamers_list)),key=lambda x: len(x))[:min(3, len(streamers_list))])
     title = f"🚨Top {game.upper()} Clips🚨{streamer_names} and more...🚨{datetime.datetime.today().date()}🚨"
         
     data_path = f"files/clips/{datetime.datetime.today().date()}/result/Top {game.upper()} Clips.json"
-    print(description)
+
     data = {
         "title": title,
         "description": description,
@@ -115,4 +117,4 @@ def add_data(clip_paths, clip_times):
 
     return data_path[:-5] + ".mp4"
 
-edit_clips(["files/clips/2024-02-21/ hydra and ott complete a usb trade.mp4", "files/clips/2024-02-21/2 to the head.mp4", "files/clips/2024-02-21/jump scare and a death .mp4", "files/clips/2024-02-21/jps pickup gets denied.mp4", "files/clips/2024-02-21/cg vs company.mp4"])
+# edit_clips(["files/clips/2024-02-21/ hydra and ott complete a usb trade.mp4", "files/clips/2024-02-21/2 to the head.mp4", "files/clips/2024-02-21/jump scare and a death .mp4", "files/clips/2024-02-21/jps pickup gets denied.mp4", "files/clips/2024-02-21/cg vs company.mp4"])
