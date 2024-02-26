@@ -20,7 +20,13 @@ def upload_video(game, pastHours, count=1):
     gameID = game_to_twitchID[game]
     time = (datetime.datetime.today() - datetime.timedelta(hours=pastHours)).isoformat() + "Z"
 
-    clip_path = edit_clips(download_multiple(gameID, time, count))
+    clips = download_multiple(gameID, time, count)
+
+    if len(clips) < count:
+        print(f"Retrieved only {len(clips)} clips. Try a bigger time range.")
+        return
+    
+    clip_path = edit_clips(clips)
 
     print(f"Are you sure you want to upload {clip_path}? (y/n)")
 
