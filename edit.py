@@ -32,7 +32,7 @@ def edit_clips(clip_paths):
     transition_clip.close()
     final_clip.close()
 
-    print("Edited clips.")
+    print("Edited clips.\n")
     return final_clip_path
 
 def get_clip_times(clips, transition_time):
@@ -98,7 +98,7 @@ def add_data(clip_paths, clip_times):
     # Get the top 3 streamers by length of their names
     streamer_names = ", ".join(sorted(list(set(streamers_list)),key=lambda x: len(x))[:min(3, len(streamers_list))])
 
-    title = f"🚨Top {game.upper()} Clips🚨{streamer_names} and more...🚨{datetime.datetime.today().date()}🚨"
+    title = f"🚨Top {game.upper()} Clips🚨{streamer_names} and more🚨{datetime.datetime.today().date()}🚨"
 
     data = {
         "title": title,

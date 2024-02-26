@@ -4,8 +4,6 @@ import os
 import requests
 import datetime
 
-GENERAL_DESCRIPTION = "\n\n\nFor all inquiries, please email: hello.toptwitchclips@gmail.com"
-
 class TwitchAPI():
 
     def __init__(self):
