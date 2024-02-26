@@ -1,1 +1,1 @@
-# top-twitch-highlights
+# top-twitch-clips
