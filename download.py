@@ -8,8 +8,11 @@ class TwitchAPI():
 
     def __init__(self):
         self.headers = None
-        self.client_id = "s97o9ivny2kk0kl6j3vfss1ptjmocs"
-        self.client_secret = "lglwiqd1zxt3abmg26jo8tnhtrfd78"
+
+        with open("twitch_secrets.json", "r") as f:
+            secrets = json.load(f)
+            self.client_id = secrets["client_id"]
+            self.client_secret = secrets["client_secret"]
 
     def auth(self):
         print("Authenticating...")
