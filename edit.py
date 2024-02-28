@@ -13,6 +13,7 @@ def edit_clips(clip_paths):
     clips = []
     for clip_path in clip_paths:
         clip = VideoFileClip(clip_path)
+        clip = clip.resize(height=1080)
         overlay = make_overlay(clip_path)
         clip = add_overlay(clip, overlay)
         clips.append(clip)
