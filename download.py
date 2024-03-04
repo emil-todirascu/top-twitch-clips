@@ -44,7 +44,7 @@ api = TwitchAPI()
 def get_top_game_clips(game_id, time):
     print("Retrieving clips...")
 
-    first = 150
+    first = 100
 
     url = f"https://api.twitch.tv/helix/clips?game_id={game_id}&started_at={time}&first={first}"
 
